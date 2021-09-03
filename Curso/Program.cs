@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Curso.Entities;
+using Curso.Entities.Enums;
 using System.Globalization;
 
 namespace Curso
@@ -9,47 +10,44 @@ namespace Curso
     {
         static void Main(string[] args)
         {
-            List<Product> list = new List<Product>();
-
-            Console.Write("Enter the number of products: ");
+            Console.Write("Enter the number of shapes: ");
             int n = int.Parse(Console.ReadLine());
+
+            List<Shape> list = new List<Shape>();
 
             for (int i = 1; i <= n; i++)
             {
-                Console.WriteLine($"Product #{i} data:");
-                Console.Write("Commom, used or imported (c/u/i)? ");
-                char type = char.Parse(Console.ReadLine());
-                Console.Write("Name: ");
-                string name = Console.ReadLine();
-                Console.Write("Price: ");
-                double price = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                Console.WriteLine($"Shape #{i} data: ");
+                Console.Write("Rectangule or Circle (r/c)? ");
+                char ch = char.Parse(Console.ReadLine());
+                Console.Write("Color (Black/Blue/Red): ");
+                Color color = Enum.Parse<Color>(Console.ReadLine());
 
-                if (type == 'c')
+                if (ch == 'r')
                 {
-                    list.Add(new Product(name, price));
-                } 
-                else if(type == 'i')
-                {
-                    Console.Write("Custom fee: ");
-                    double customsFee = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-                    list.Add(new ImportedProduct(name, price, customsFee));
+                    Console.Write("Width: ");
+                    double width = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                    Console.Write("Height: ");
+                    double height = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+                    list.Add(new Rectangule(width, height, color));
                 }
                 else
                 {
-                    Console.Write("Manufacture date (DD/MM/YYYY): ");
-                    DateTime manufactureDate = DateTime.Parse(Console.ReadLine());
-                    list.Add(new UsedProduct(name, price, manufactureDate));
+                    {
+                        Console.Write("Radius: ");
+                        double radius = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+                        list.Add(new Circle(radius, color));
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("SHAPE AREAS:");
+                    foreach (Shape shape in list)
+                    {
+                        Console.WriteLine(shape.Area().ToString("F2", CultureInfo.InvariantCulture));
+                    }
                 }
             }
-
-            Console.WriteLine();
-            Console.WriteLine("PRICE TAGS");
-
-            foreach (Product product in list)
-            {
-                Console.WriteLine(product.PriceTag());
-            }
-
         }
     }
 }
