@@ -1,4 +1,5 @@
 ﻿using System;
+using Curso.Entities.Exceptions;
 
 namespace Curso.Entities
 {
@@ -15,6 +16,11 @@ namespace Curso.Entities
 
         public Reservation(int roomNumber, DateTime checkin, DateTime checkout)
         {
+            if (checkout <= checkin)
+            {
+                throw new DomainException("Error in reservation: Check-out date must be after check-in date.");
+            }
+
             RoomNumber = roomNumber;
             Checkin = checkin;
             Checkout = checkout;
@@ -26,21 +32,20 @@ namespace Curso.Entities
             return (int)duration.TotalDays;
         }
 
-        public string UpdateDates(DateTime checkin, DateTime checkout)
+        public void UpdateDates(DateTime checkin, DateTime checkout)
         {
             DateTime now = DateTime.Now;
             if (checkin < now || checkout < now)
             {
-                return "Error in reservation: Reservation dates for update must be future dates.";
+                throw new DomainException("Error in reservation: Reservation dates for update must be future dates.");
             }
             if (checkout <= checkin)
             {
-                return "Error in reservation: Check-out date must be after check-in date.";
+                throw new DomainException("Error in reservation: Check-out date must be after check-in date.");
             }
 
             Checkin = checkin;
             Checkout = checkout;
-            return null;
         }
 
         public override string ToString()
