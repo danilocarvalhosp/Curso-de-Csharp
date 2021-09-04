@@ -1,47 +1,35 @@
 ﻿using System;
+using System.Globalization;
 using Curso.Entities;
-using Curso.Entities.Exceptions;
+using Curso.Exceptions;
 
-namespace Curso
-{
-    class Program
+    public class Program 
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
+            Console.WriteLine("Enter account data");
+            Console.Write("Number: ");
+            int number = int.Parse(Console.ReadLine());
+            Console.Write("Holder: ");
+            string holder = Console.ReadLine();
+            Console.Write("Initial balance: ");
+            double balance = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+            Console.Write("Withdraw limit: ");
+            double withdrawLimit = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+
+            Account acc = new Account(number, holder, balance, withdrawLimit);
+
+            Console.WriteLine();
+            Console.Write("Enter amount for withdraw: ");
+            double amount = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
             try
             {
-                Console.Write("Room number: ");
-                int number = int.Parse(Console.ReadLine());
-                Console.Write("Check-in date (dd/MM/yyyy): ");
-                DateTime checkin = DateTime.Parse(Console.ReadLine());
-                Console.Write("Check-out date (dd/MM/yyyy): ");
-                DateTime checkout = DateTime.Parse(Console.ReadLine());
-
-                Reservation reservation = new Reservation(number, checkin, checkout);
-                Console.WriteLine("Reservation: " + reservation);
-
-                Console.WriteLine();
-                Console.WriteLine("Enter data to update the reservation:");
-                Console.Write("Check-in date (dd/MM/yyyy): ");
-                checkin = DateTime.Parse(Console.ReadLine());
-                Console.Write("Check-out date (dd/MM/yyyy): ");
-                checkout = DateTime.Parse(Console.ReadLine());
-
-                reservation.UpdateDates(checkin, checkout);
-                Console.WriteLine("Reservation: " + reservation);
+                acc.Withdraw(amount);
+                Console.WriteLine("New balance: " + acc.Balance.ToString("F2", CultureInfo.InvariantCulture));
             }
-            catch (DomainException e)
+            catch (AccountExceptions e)
             {
-                Console.WriteLine("Error in reservation: " + e.Message);
-            }
-            catch (FormatException e)
-            {
-                Console.WriteLine("Format error: " + e.Message);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Unexpected error: " + e.Message);
+                Console.WriteLine("Withdraw error: " + e.Message);
             }
         }
     }
-}
