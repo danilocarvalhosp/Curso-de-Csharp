@@ -1,24 +1,22 @@
 ﻿using System;
-using Curso.Entities;
-using Curso.Enums;
+using Curso.Devices;
 
 public class Program
 {
     public static void Main(string[] args)
     {
-        IShape s1 = new Circle()
-        {
-            Radius = 2.0,
-            Color = Color.White
-        };
-        IShape s2 = new Rectangle()
-        {
-            Width = 3.5,
-            Height = 4.2,
-            Color = Color.Black
-        };
+        Printer p = new Printer() { SerialNumber = 1080 };
+        p.ProcessDoc("My letter");
+        p.Print("My letter");
 
-        Console.WriteLine(s1);
-        Console.WriteLine(s2);
+        Scanner s = new Scanner() { SerialNumber = 2003 };
+        s.ProcessDoc("My email");
+        Console.WriteLine(s.Scan());
+
+        ComboDevice c = new ComboDevice() { SerialNumber = 3921 };
+        c.ProcessDoc("My Dissertation");
+        c.Print("My Dissertation");
+
+        Console.WriteLine(c.Scan());
     }
 }
