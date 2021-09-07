@@ -7,26 +7,25 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        Console.WriteLine("Enter rental data");
-        Console.Write("Car model: ");
-        string model = Console.ReadLine();
-        Console.Write("Pickup (dd/MM/yyyy hh:ss): ");
-        DateTime start = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-        Console.Write("Return (dd/MM/yyyy hh:ss): ");
-        DateTime finish = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+        Console.WriteLine("Enter contract data");
+        Console.Write("Number: ");
+        int contractNumber = int.Parse(Console.ReadLine());
+        Console.Write("Date (dd/MM/yyyy): ");
+        DateTime contractDate = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy", CultureInfo.InvariantCulture);
+        Console.Write("Contract value: ");
+        double contractValue = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+        Console.Write("Enter number of installments: ");
+        int months = int.Parse(Console.ReadLine());
 
-        Console.WriteLine("Enter price per hour: ");
-        double hour = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-        Console.WriteLine("Enter price per day: ");
-        double day = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+        Contract contract = new Contract(contractNumber, contractDate, contractValue);
 
-        CarRental carRental = new CarRental(start, finish, new Vehicle(model));
+        ContractService contractService = new ContractService(new PaypalService());
+        contractService.ProcessContract(contract, months);
 
-        RentalService rentalService = new RentalService(hour, day, new BrazilTaxService());
-
-        rentalService.ProcessInvoice(carRental);
-
-        Console.WriteLine("INVOICE:");
-        Console.WriteLine(carRental.Invoices); ;
+        Console.WriteLine("Installments: ");
+        foreach(Installment installment in contract.Installments)
+        {
+            Console.WriteLine(installment);
+        }
     }
 }
