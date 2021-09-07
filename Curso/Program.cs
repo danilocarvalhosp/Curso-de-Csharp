@@ -1,35 +1,32 @@
 ﻿using System;
 using System.Globalization;
 using Curso.Entities;
-using Curso.Exceptions;
+using Curso.Services;
 
-    public class Program 
+public class Program
+{
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
-        {
-            Console.WriteLine("Enter account data");
-            Console.Write("Number: ");
-            int number = int.Parse(Console.ReadLine());
-            Console.Write("Holder: ");
-            string holder = Console.ReadLine();
-            Console.Write("Initial balance: ");
-            double balance = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-            Console.Write("Withdraw limit: ");
-            double withdrawLimit = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+        Console.WriteLine("Enter rental data");
+        Console.Write("Car model: ");
+        string model = Console.ReadLine();
+        Console.Write("Pickup (dd/MM/yyyy hh:ss): ");
+        DateTime start = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
+        Console.Write("Return (dd/MM/yyyy hh:ss): ");
+        DateTime finish = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
-            Account acc = new Account(number, holder, balance, withdrawLimit);
+        Console.WriteLine("Enter price per hour: ");
+        double hour = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
+        Console.WriteLine("Enter price per day: ");
+        double day = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
 
-            Console.WriteLine();
-            Console.Write("Enter amount for withdraw: ");
-            double amount = double.Parse(Console.ReadLine(), CultureInfo.InvariantCulture);
-            try
-            {
-                acc.Withdraw(amount);
-                Console.WriteLine("New balance: " + acc.Balance.ToString("F2", CultureInfo.InvariantCulture));
-            }
-            catch (AccountExceptions e)
-            {
-                Console.WriteLine("Withdraw error: " + e.Message);
-            }
-        }
+        CarRental carRental = new CarRental(start, finish, new Vehicle(model));
+
+        RentalService rentalService = new RentalService(hour, day);
+
+        rentalService.ProcessInvoice(carRental);
+
+        Console.WriteLine("INVOICE:");
+        Console.WriteLine(carRental.Invoices); ;
     }
+}
