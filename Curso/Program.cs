@@ -2,11 +2,11 @@
 
 namespace Curso {
 
-    public class Program
+    class Program
     {
-        public static void Main(string[] args)
+        static void Main(string[] args)
         {
-            PrintService printService = new PrintService();
+            PrintService<int> printService = new PrintService<int>();
 
             Console.Write("How many values? ");
             int n = int.Parse(Console.ReadLine());
