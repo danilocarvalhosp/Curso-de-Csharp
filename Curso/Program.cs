@@ -1,22 +1,25 @@
 ﻿using System;
-using Curso.Devices;
 
-public class Program
-{
-    public static void Main(string[] args)
+namespace Curso {
+
+    public class Program
     {
-        Printer p = new Printer() { SerialNumber = 1080 };
-        p.ProcessDoc("My letter");
-        p.Print("My letter");
+        public static void Main(string[] args)
+        {
+            PrintService printService = new PrintService();
 
-        Scanner s = new Scanner() { SerialNumber = 2003 };
-        s.ProcessDoc("My email");
-        Console.WriteLine(s.Scan());
+            Console.Write("How many values? ");
+            int n = int.Parse(Console.ReadLine());
 
-        ComboDevice c = new ComboDevice() { SerialNumber = 3921 };
-        c.ProcessDoc("My Dissertation");
-        c.Print("My Dissertation");
+            for (int i = 0; i < n; i++)
+            {
+                int x = int.Parse(Console.ReadLine());
+                printService.AddValue(x);
+            }
 
-        Console.WriteLine(c.Scan());
+            printService.Print();
+
+            Console.WriteLine("First: " + printService.First());
+        }
     }
 }
